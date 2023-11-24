@@ -1,0 +1,69 @@
+% ----------------------------------
+% PACKAGES
+% ----------------------------------
+
+% \usepackage[noTeX]{mmap}
+\usepackage{cmap}
+\usepackage[T1,T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+% \usepackage{hyphsubst}
+\usepackage[english,russian]{babel}
+\usepackage[left=1in,right=1in,top=1in,bottom=1in,paper=a4paper]{geometry}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,mathtools}
+\usepackage{lipsum}
+% \usepackage{extsizes} -- conflict with geometry package
+\usepackage{xfrac}
+\usepackage{enumitem}
+\usepackage{bookmark}
+
+% ----------------------------------
+% custom packages
+% \usepackage{bigints}
+% ----------------------------------
+
+\usepackage{hyperref,theoremref}
+\usepackage{cleveref}
+\usepackage{nameref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+    pdftitle={assignment},
+}
+\urlstyle{same}
+\newcommand\myref[1]{\hyperref[#1]{#1}}
+
+\usepackage{etoolbox}
+\usepackage{multicol,array}
+\usepackage{pdfpages}
+
+\usepackage{graphicx}
+\graphicspath{ {./visual/} }
+
+\mathtoolsset{showonlyrefs=false}
+% \usepackage{leqno}
+
+\usepackage{biblatex}
+% \usepackage{cite}
+\usepackage{csquotes}
+% \renewcommand{\refname}{Список источников}  % default: "Список литературы" (article)
+% \renewcommand{\bibname}{Список литературы} % default: "Литература" (book и report)
+
+
+% ----------------------------------
+% COMMANDS
+% ----------------------------------
+
+% bigcdot ( \cdot < \bigcdot < \bullet )
+\makeatletter
+\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
+\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\makeatother
+
+% deliminator
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\round}{\lfloor}{\rceil}

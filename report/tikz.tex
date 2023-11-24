@@ -1,0 +1,87 @@
+% ---------------------------------------------------------
+\documentclass{article}
+% ---------------------------------------------------------
+\input{preamble}
+\input{graphs}
+\input{macros}
+\input{letterfonts}
+% ---------------------------------------------------------
+\begin{document}
+
+
+\begin{center}
+    \begin{tikzpicture}
+        \draw [help lines] (-8,-15) grid (8,8);
+        \draw[fill=black, opacity=.5] (0, 0) circle(2pt)
+        node [above] {(0,0)};
+        \foreach \t in {2, 4, 6, 8}
+        {
+        \draw[fill=black, opacity=0.5] (\t, \t) circle (2pt)
+        node [above] {(\t,\t)};
+        \draw[fill=black, opacity=0.5] (-\t, \t) circle (2pt)
+        node [above] {(-\t,\t)};
+        \draw[fill=black, opacity=0.5] (\t, -\t) circle (2pt)
+        node [above] {(\t,-\t)};
+        \draw[fill=black, opacity=0.5] (-\t, -\t) circle (2pt)
+        node [above] {(-\t,-\t)};
+        }
+        \foreach \u in {2, 4, 6, 8}
+        {
+        \draw[fill=black, opacity=0.5] (0, \u) circle (2pt)
+        node [above] {(0,\u)};
+        \draw[fill=black, opacity=0.5] (0, -\u) circle (2pt)
+        node [above] {(0,-\u)};
+        \draw[fill=black, opacity=0.5] (\u, 0) circle (2pt)
+        node [above] {(\u,0)};
+        \draw[fill=black, opacity=0.5] (-\u, 0) circle (2pt)
+        node [above] {(-\u,0)};
+        }
+
+    \tikzstyle{vertex}=[auto=left,circle,fill=orange!25,opacity=.8,
+        draw=orange,minimum size=20pt,inner sep=0pt]
+
+        \foreach \t in {0, 1, 2, 3}
+        {
+            \node[vertex] (n\t)  at (-4,3-1.5*\t)    {$\omega_{k\t}$};
+            \node[left = 1.5cm of n\t] (x\t) at (n\t) {$x_\t$};
+        }
+
+        \node[vertex] (nm)  at (-4,-4)   {$\omega_{km}$};
+        \node[left = 1.5cm of nm] (xm) at (nm) {$x_m$};
+        \path (n3) -- (nm) node [black, font=\huge, midway]
+        {$\vdots$};
+        \path (x3) -- (xm) node [black, font=\huge, midway]
+        {$\vdots$};
+
+        \node[circle, fill=orange!25, opacity=.8,draw=orange,
+        minimum size=35pt,inner sep=0pt] (sum) at (-1.5,0)
+        {$\Sigma$};
+
+        \foreach \t in {0, 1, 2, 3, m}
+        {
+            \draw[Circle-Stealth, shorten >=2pt] (x\t) -- (n\t);
+            \draw[-Stealth, shorten <=1pt, shorten >=2pt] (n\t) --
+            (sum);
+        }
+
+        \node[rectangle, fill=blue!25, opacity=.8, draw=blue, minimum
+        height=0.7cm, minimum width=1.2cm] (func)
+        at (1,0) {$\varphi(\cdot)$};
+        \draw[-Stealth, shorten <=1pt, shorten >=2pt] (sum) --
+        (func) node[fill=white, inner sep=2pt, midway] {$v_k$};
+
+        \node (result) at (2.8,0) {$y_k$};
+        \draw[-{Stealth}{Stealth}, shorten <=1pt] (func) --
+        (result);
+
+
+    \end{tikzpicture}
+\end{center}
+
+
+
+
+
+
+
+\end{document}
