@@ -84,12 +84,12 @@
 
 \section{Модели нейронов}
 \textit{Нейрон} представляет собой единицу обработки информации в
-нейронной сети. На рис. \ref{fig:unlinear neuron model} показана модель нейрона, лежащего в
+нейронной сети. На рис. \ref{fig:nonlinear neuron model} показана модель нейрона, лежащего в
 основе нейронных сетей. В модели можно выделить три основных элемента.
 
 \begin{figure}[!htb]
 \centering
-\resizebox{0.50\paperwidth}{!}{%
+\resizebox{0.70\paperwidth}{!}{%
     \begin{tikzpicture}
         \tikzstyle{vertex}=[auto=left,circle,fill=orange!25,opacity=.8,
             draw=orange,minimum size=20pt,inner sep=0pt]
@@ -136,10 +136,19 @@
 
             \draw[thick, decorate, decoration={calligraphic brace}]
             (-6.3,-4.2) -- (-6.3,1.7);
+
+            \node[text width=2.5cm] at (-7.0, -1.25) {Входные сигналы};
+            \node[right=.3cm of result, text width=2.5cm]
+            at (result) {Выходной сигнал};
+
+            \node[text width=2.5cm, align=center] at (1,1)
+            {Функция активации};
+
+            \node[below right=4pt and -.5cm of sum] {Сумматор};
     \end{tikzpicture}
     }
     \caption{Нелинейная модель нейрона}
-    \label{fig:unlinear neuron model}
+    \label{fig:nonlinear neuron model}
 \end{figure}
 
 \begin{enumerate}
@@ -157,7 +166,7 @@
 \end{enumerate}
 
 Очень часто в модель нейрона включают и пороговый элемент,
-обозначенный на рис. \ref{fig:unlinear neuron model} символом $b_k$. Эта величина отражает
+обозначенный на рис. \ref{fig:nonlinear neuron model} символом $b_k$. Эта величина отражает
 увеличение или уменьшение входного сигнала $v_k$, подаваемого на функцию
 активации. Другими словами, использование порога $b_k$ обеспечивает
 эффект аффинного преобразования выхода линейного сумматора $u_k$ см.
