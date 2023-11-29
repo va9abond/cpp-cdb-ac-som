@@ -40,39 +40,66 @@
     \tikzstyle{vertex}=[auto=left,circle,fill=orange!25,opacity=.8,
         draw=orange,minimum size=20pt,inner sep=0pt]
 
-        \foreach \t in {0, 1, 2, 3}
+        \draw[fill=white, draw=black, dashed]
+        (-3,1) -- (-2,4) -- (2.5, 4) -- (1.5, 1) -- cycle;
+
+        \foreach \u in {0, 1, 2, 3}
         {
-            \node[vertex] (n\t)  at (-4,3-1.5*\t)    {$\omega_{k\t}$};
-            \node[left = 1.5cm of n\t] (x\t) at (n\t) {$x_\t$};
+            \node[ellipse,
+                draw=black,
+                fill=gray!20,
+                minimum width = 5mm,
+                minimum height = 2mm]
+            (e12\u) at (-2+1/3+\u*1.15, 3.5) {};
+
+            \node[ellipse,
+                draw=black,
+                fill=gray!20,
+                minimum width = 5mm,
+                minimum height = 2mm]
+            (e11\u) at (-2+\u*1.15,2.5) {};
+
+            \node[ellipse,
+                draw=black,
+                fill=gray!20,
+                minimum width = 5mm,
+                minimum height = 2mm]
+            (e10\u) at (-2-1/3+\u*1.15,1.5) {};
         }
 
-        \node[vertex] (nm)  at (-4,-4)   {$\omega_{km}$};
-        \node[left = 1.5cm of nm] (xm) at (nm) {$x_m$};
-        \path (n3) -- (nm) node [black, font=\huge, midway]
-        {$\vdots$};
-        \path (x3) -- (xm) node [black, font=\huge, midway]
-        {$\vdots$};
+        \node[ellipse,
+            draw=Orange,
+            fill=orange!50,
+            minimum width = 5mm,
+            minimum height = 2mm]
+        (ew) at (-2+1.15,2.5) {};
 
-        \node[circle, fill=orange!25, opacity=.8,draw=orange,
-        minimum size=35pt,inner sep=0pt] (sum) at (-1.5,0)
-        {$\Sigma$};
+        \node[ellipse,
+            draw=Green,
+            fill=green!50,
+            minimum width = 5mm,
+            minimum height = 2mm]
+        (ea) at (-0.5,-1) {};
 
-        \foreach \t in {0, 1, 2, 3, m}
-        {
-            \draw[Circle-Stealth, shorten >=2pt] (x\t) -- (n\t);
-            \draw[-Stealth, shorten <=1pt, shorten >=2pt] (n\t) --
-            (sum);
+        \foreach \u in {0,1,2,3} {
+            \foreach \v in {0,1,2}
+            {
+                \draw[-] (ea) -- (e1\v\u) {};
+            }
         }
 
-        \node[rectangle, fill=blue!25, opacity=.8, draw=blue, minimum
-        height=0.7cm, minimum width=1.2cm] (func)
-        at (1,0) {$\varphi(\cdot)$};
-        \draw[-Stealth, shorten <=1pt, shorten >=2pt] (sum) --
-        (func) node[fill=white, inner sep=2pt, midway] {$v_k$};
+        \draw[thick, decorate, decoration={calligraphic brace}]
+        (-3.5,1) -- (-3.5,4);
 
-        \node (result) at (2.8,0) {$y_k$};
-        \draw[-{Stealth}{Stealth}, shorten <=1pt] (func) --
-        (result);
+        \node[text width = 4cm, align=center] at (-5.3,2.5)
+        {Постсинаптические нейроны};
+
+        \node[text width = 3cm, align=center] at (-0.4,-1.7)
+        {Входной сигнал};
+
+        \node[text width=2.5cm, align=center] at (1.3,0)
+        {Пучок нейронов};
+
 
 
     \end{tikzpicture}

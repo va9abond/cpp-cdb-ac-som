@@ -49,21 +49,3 @@
 \usepackage{csquotes}
 % \renewcommand{\refname}{Список источников}  % default: "Список литературы" (article)
 % \renewcommand{\bibname}{Список литературы} % default: "Литература" (book и report)
-
-
-% ----------------------------------
-% COMMANDS
-% ----------------------------------
-
-% bigcdot ( \cdot < \bigcdot < \bullet )
-\makeatletter
-\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
-\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
-\makeatother
-
-% deliminator
-\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
-\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
-\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
-\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
-\DeclarePairedDelimiter{\round}{\lfloor}{\rceil}
