@@ -1334,7 +1334,8 @@ $h_{j,i}$ удовлетворяет следующим требованиям.
 карты является то, что размер топологической окрестности со временем
 уменьшается. Это требование удовлетворяется за счет постепенного
 уменьшения ширины $\sigma$. Например, можно уменьшать ее
-экспоненциально в зависимости от дискретного времени $n$:
+экспоненциально в зависимости от дискретного времени $n$ (см. рис.
+\ref{fig:effective width 2}):
 \begin{equation}
     \sigma(n) = \sigma_0\exp{\left( - \frac{n}{\tau_1}\right)},\, n
     \in \NN,
@@ -1342,27 +1343,31 @@ $h_{j,i}$ удовлетворяет следующим требованиям.
 где $\sigma_0$ - начальное значение величины $\sigma$; $\tau_1$ -
 некоторая константа.
 
-% \begin{figure}
-%     \centering
-%     \begin{tikzpicture}
-%         \begin{axis}[
-%             title={Эффективная ширина, $\sigma(n)$},
-%             xlabel={шаг, $n$},
-%             ylabel={$\sigma(n)$},
-%             grid=major,
-%             xmax=100,
-%         ]
-%             \addplot[
-%                 ultra thick,
-%                 Purple
-%             ]{10*exp(-x/41)};
-%
-%         \end{axis}
-%     \end{tikzpicture}
-%     \caption{Пример изменения функции эффективной ширины с течением
-%     времени}
-%     \label{fig:effective width 2}
-% \end{figure}
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            title={Эффективная ширина, $\sigma(n)$},
+            xlabel={шаг, $n$},
+            ylabel={$\sigma(n)$},
+            grid=major,
+            % xmin=0,ymin=0,
+            % xmax=4000,ymax=12,
+            % xtick=500,ytick=2
+        ]
+            \addplot[
+                domain=0:4000,
+                ultra thick,
+                Purple,
+                samples=200,
+            ]{10*exp(-((x)/(1000/log10(10)))};
+
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Пример изменения функции эффективной ширины с течением
+    времени}
+    \label{fig:effective width 2}
+\end{figure}
 
 По окончании этапа обучения функция $h_{j,i}$ должна охватывать только
 ближайших соседей. Исходя из этого мы получаем следующую форму функции
@@ -1372,7 +1377,35 @@ $h_{j,i}$ удовлетворяет следующим требованиям.
 \end{equation}
 Таким образом, при увеличении количества итераций $n$ ширина
 $\sigma(n)$ экспоненциально убывает, а вместе с ней соответственно
-сжимается и топологическая окрестность.
+сжимается и топологическая окрестность см. рис. \ref{fig:h educ}.
+
+\begin{figure}[!htb]
+    \centering
+    \subfloat[До обучения \label{fig:educ before}]{%
+            \begin{tikzpicture}
+                \begin{axis}[
+                    domain=-10:9,
+                    mesh,
+                    % colormap/PuBu,
+                    grid=major,
+                ]
+                    \addplot3[surf]{exp(-(x^2+y^2)/20)};
+                \end{axis}
+        \end{tikzpicture}
+    }
+    \subfloat[После обучения\label{fig:educ after}]{%
+            \begin{tikzpicture}
+                \begin{axis}[
+                    grid=major,
+                ]
+                    \addplot3[surf]{exp(-(x^2+y^2)/2)};
+                \end{axis}
+        \end{tikzpicture}
+    }
+    \caption{Изменение топологической окрестности нейрона до и после
+    обучения сети}
+    \label{fig:h educ}
+\end{figure}
 
 \paragraph{Процесс адаптации}
 Процесс синаптической адаптации включает в себя изменение
