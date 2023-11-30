@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <utility>
 #include <map>
 #include <set>
 #include <vector>
@@ -23,6 +24,8 @@ namespace alias {
     using vd  = std::vector<double>;
     using vvi = std::vector<std::vector<int>>;
     using vi  = std::vector<int>;
+
+    using iipair = std::pair<int,int>;
 }
 
 namespace rndm {
@@ -46,21 +49,22 @@ namespace rndm {
 }
 
 
-inline void _VERIFY (bool expression, const char* msg) {
-    if (expression == false)
-    {
-        std::cerr << "\n" << "===================================="
-                  << msg
-                  << "\n" << "====================================";
-        std::exit(134);
+namespace error_handler {
+    inline void _VERIFY (bool expression, const char* msg) {
+        if (expression == false)
+        {
+            std::cerr << "\n" << "===================================="
+                      << msg
+                      << "\n" << "====================================";
+            std::exit(134);
+        }
     }
 }
-
 
 template <class Num_t = double>
 std::vector<Num_t> operator+ ( const std::vector<Num_t>& rhs,
                                const std::vector<Num_t>& lhs ) {
-    _VERIFY(rhs.size() == lhs.size());
+    error_handler::_VERIFY(rhs.size() == lhs.size());
 
     std::vector<Num_t> result (rhs.size());
     for (unsigned int i {0}; i < rhs.size(); ++i) {
@@ -74,7 +78,7 @@ std::vector<Num_t> operator+ ( const std::vector<Num_t>& rhs,
 template <class Num_t = double>
 std::vector<Num_t> operator- ( const std::vector<Num_t>& rhs,
                                const std::vector<Num_t>& lhs ) {
-    _VERIFY(rhs.size() == lhs.size());
+    error_handler::_VERIFY(rhs.size() == lhs.size());
 
     std::vector<Num_t> result (rhs.size());
     for (unsigned int i {0}; i < rhs.size(); ++i) {
