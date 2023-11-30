@@ -28,6 +28,7 @@ namespace alias {
     using iipair = std::pair<int,int>;
 }
 
+
 namespace rndm {
 
     template <class Num_t, typename Gen_t = std::mt19937>
@@ -60,6 +61,7 @@ namespace error_handler {
         }
     }
 }
+
 
 template <class Num_t = double>
 std::vector<Num_t> operator+ ( const std::vector<Num_t>& rhs,
