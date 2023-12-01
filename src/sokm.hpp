@@ -10,7 +10,7 @@ struct neuron {
     using vd   = alias::vd;
 
 
-    neuron (int x, int y) : coords({x,y}), weights() {}
+    neuron (int x, int y, vd&& ws) : coords({x,y}), weights(ws) {}
 
     static double distance (const neuron& lhs, const neuron& rhs) {
         double sq_dist = 0;
@@ -69,9 +69,22 @@ private:
 
         for (ui x = 0; x < n; ++x) {
             for (ui y = 0; y < m; ++y) {
-                neurons.push_back(neuron(x,y));
+                neurons.push_back(
+                        neuron( x,y,
+                            std::move(construct_neuron_weights()) )
+                );
             }
         }
+    }
+
+    vd construct_neuron_weights() {
+        vd weights(input_dim, 0);
+
+        for (auto& w : weights) {
+            w = rndm::random<double>(-1.0, 1.0);
+        }
+
+        return weights;
     }
 
 public:
