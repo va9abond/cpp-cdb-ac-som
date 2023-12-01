@@ -54,7 +54,7 @@ namespace error_handler {
     inline void _VERIFY (bool expression, const char* msg) {
         if (expression == false)
         {
-            std::cerr << "\n" << "===================================="
+            std::cerr << "\n" << "====================================\n"
                       << msg
                       << "\n" << "====================================";
             std::exit(134);
