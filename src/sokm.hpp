@@ -223,6 +223,10 @@ public:
         lrate = lrate0 * std::exp(-( (step) / (tau2) ));
     }
 
+    std::pair<double, double> classify (const vd& signal) {
+        return competition(signal).coords;
+    }
+
 
     const ui input_dim;
     const ui feature_dim;
