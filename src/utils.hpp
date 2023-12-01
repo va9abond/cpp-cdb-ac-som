@@ -153,6 +153,33 @@ namespace ccout {
         }
         std::cout << "}\n";
     }
+
+    inline void print (const std::vector<double>& doubles) {
+        std::cout << "{ ";
+        for (const auto& d : doubles) {
+            std::cout << d << " ";
+        }
+        std::cout << "}\n";
+    }
+
+    inline void print (const alias::iipair& pair) {
+        std::cout << std::format("({},{}) ", pair.first, pair.second);
+    }
+}
+
+
+namespace vec_utils {
+    template <class Valty>
+    inline std::vector<double> convert_to_doubles (
+            const std::vector<Valty>& vals
+    ) {
+        std::vector<double> result(vals.size());
+        for (unsigned int i = 0; i < vals.size(); ++i) {
+            result[i] = (double)vals[i];
+        }
+
+        return result;
+    }
 }
 
 
