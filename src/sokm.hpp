@@ -4,6 +4,7 @@
 
 #include "utils.hpp"
 
+#define DEBUG_PRINT 0
 
 struct neuron {
     using pair = alias::iipair;
@@ -101,6 +102,7 @@ public:
         return sq_dist;
     }
 
+private:
     // find neuron-winner ix (min euclidean distance)
     // for current input signal
     neuron& competition (const vd& sig) {
@@ -119,7 +121,6 @@ public:
         return neurons[ix];
     };
 
-private:
     // find topological neighbourhood
     // for neuron-winner (nw)
     std::vector<neuron*> cooperation (const neuron& nw) {
@@ -154,7 +155,57 @@ private:
     };
 
 public:
-    void train() {};
+    void train (const vd& signal) {
+        neuron& neuron_winner = competition(signal);
+
+        // double sq_ewidth = ewidth * ewidth;
+                                      // cooperation process
+        for (auto& neuron : neurons) {
+            const auto [dist, hjix] = hji(neuron_winner, neuron);
+            if (math::is_double_grt(hjix, 0)) {
+                                       // adaptation process (hjix > 0)
+                // dw  = learning_rate * hjix * (signal - neuron.weights)
+                vd dw = lrate * hjix * (signal - neuron.weights);
+                neuron.weights += dw;
+            }
+        }
+
+        updatae_constants();
+// =====================================================
+#if DEBUG_PRINT
+        using std::cout;
+        using std::right;
+
+        printf("{\n");
+        for (const auto& n : neurons) {
+            printf("\t(%d,%d): { ", n.coords.first, n.coords.second);
+            for (const auto& w : n.weights) {
+                printf("%f ", w);
+            }
+            printf("};\n");
+        }
+
+        cout.width(50); cout << right << "===========\n";
+        cout.width(50); cout << right <<
+            std::format("lrate: {}\n", lrate);
+        cout.width(50); cout << right <<
+            std::format("ewidth: {}\n", ewidth);
+
+        printf("}\n");
+#endif
+// =====================================================
+    };
+
+    void updatae_constants() {
+        update_step();
+        update_lrate();
+        update_ewidth();
+    }
+
+    std::pair<double, double> hji (const neuron& n1, const neuron& n2) {
+        double dist = neuron::distance(n1, n2);
+        return {dist, std::exp(- ((dist * dist) / (2 * sq_ewidth)) )};
+    }
 
     void update_step() { ++step; }
 
@@ -162,12 +213,14 @@ public:
         ewidth = ( step > 1000 ?
                     ewidth0 * std::exp(-( (step) / (tau1) )) :
                     ewidth0 );
+        sq_ewidth = ewidth * ewidth;
     }
 
     void update_lrate() { // [WARNING]: > for doubles
-        lrate = ( math::is_double_grt(lrate0, lrate) ?
-                  lrate0 :
-                  lrate0 * std::exp(-( (step) / (tau2) )) );
+        // lrate = ( math::is_double_grt(lrate0, lrate) ?
+        //           lrate0 :
+        //           lrate0 * std::exp(-( (step) / (tau2) )) );
+        lrate = lrate0 * std::exp(-( (step) / (tau2) ));
     }
 
 
@@ -180,9 +233,39 @@ public:
     const double tau2   = 1000; // lrate multiplier
           double lrate  = 0;    // [TODO]: should be function
           double ewidth = 0;    // [TODO]: should be function effective width
+          double sq_ewidth = ewidth * ewidth;
     std::vector<neuron> neurons; // vector of output(feature)
                                  // neuron layer
 };
+
+
+namespace ccout { // custom console output
+    using std::cout;
+    using std::right;
+
+    inline void print (const neuron& n) {
+        printf("\t(%d,%d): { ", n.coords.first, n.coords.second);
+        for (const auto& w : n.weights) {
+            printf("%f ", w);
+        }
+        printf("};\n");
+    }
+
+    inline void print (const sokm& map) {
+        printf("{\n");
+        for (const auto& n : map.neurons) {
+            print(n);
+        }
+
+        cout.width(50); cout << right << "===========\n";
+        cout.width(50); cout << right <<
+            std::format("lrate: {}\n", map.lrate);
+        cout.width(50); cout << right <<
+            std::format("ewidth: {}\n", map.ewidth);
+
+        printf("}\n");
+    }
+}
 
 
 #endif // SOKM_HPP
