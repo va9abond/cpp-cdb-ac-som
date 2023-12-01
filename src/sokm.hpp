@@ -51,7 +51,7 @@ struct sokm {
         error_handler::_VERIFY(n*m == fdim, "incorrect feature dimension");
 
         update_ewidth();
-        update_learning_rate();
+        update_lrate();
         construct_output_layer(n, m);
     }
 
@@ -132,7 +132,7 @@ struct sokm {
             tpn[i]->weights += dw;
         }
 
-        update_learning_rate();
+        update_lrate();
         update_ewidth();
     };
 
@@ -146,7 +146,7 @@ struct sokm {
                     ewidth0 );
     }
 
-    void update_learning_rate() { // [WARNING]: > for doubles
+    void update_lrate() { // [WARNING]: > for doubles
         lrate = ( lrate < lrate0 ?
                           lrate0 :
                           lrate0 * std::exp(-( (step) / (tau2) )) );
