@@ -33,7 +33,7 @@ inline bool operator== (const neuron& lhs, const neuron& rhs) {
 }
 
 
-struct sokm {
+class sokm {
     using ui = unsigned int;
     using vvd = alias::vvd;
     using vd = alias::vd;
@@ -52,9 +52,10 @@ struct sokm {
 
         update_ewidth();
         update_lrate();
-        construct_output_layer(n, m);
+        construct_feature_layer(n, m);
     }
 
+private:
     // construct output neuron layer
     // [NOTE]: n*m shouldn't equals 0
     // ^
@@ -62,7 +63,7 @@ struct sokm {
     // | m
     // |     n
     // + -------->
-    void construct_output_layer (int n, int m) {
+    void construct_feature_layer (int n, int m) {
         error_handler::_VERIFY((n*m) != 0 ,
                                "output layer shoud contain at least one dimension");
 
@@ -73,6 +74,7 @@ struct sokm {
         }
     }
 
+public:
     // square of euclidean distance
     static double sq_euclidean_distance (const vd& x, const vd& y) {
         error_handler::_VERIFY(x.size() == y.size(),
@@ -104,6 +106,7 @@ struct sokm {
         return neurons[ix];
     };
 
+private:
     // find topological neighbourhood
     // for neuron-winner (nw)
     std::vector<neuron*> cooperation (const neuron& nw) {
@@ -124,6 +127,7 @@ struct sokm {
 
     void adaptation (const vd& sig, const neuron& nw, const std::vector<neuron*>& tpn) {
         double sq_e_width = ewidth * ewidth;
+                                       // adaptation process
         for (ui i {0}; i < tpn.size(); ++i) {
             // dw  = learning_rate * hjx * (sig - neuron.weights)
             double dist = neuron::distance(nw, neurons[i]);
@@ -136,6 +140,7 @@ struct sokm {
         update_ewidth();
     };
 
+public:
     void train() {};
 
     void update_step() { ++step; }
