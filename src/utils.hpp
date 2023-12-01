@@ -66,7 +66,8 @@ namespace error_handler {
 template <class Num_t = double>
 inline std::vector<Num_t> operator+ ( const std::vector<Num_t>& rhs,
                                       const std::vector<Num_t>& lhs ) {
-    error_handler::_VERIFY(rhs.size() == lhs.size());
+    error_handler::_VERIFY(rhs.size() == lhs.size(),
+                           "vectors shouls have the same size");
 
     std::vector<Num_t> result (rhs.size());
     for (unsigned int i {0}; i < rhs.size(); ++i) {
@@ -80,7 +81,8 @@ inline std::vector<Num_t> operator+ ( const std::vector<Num_t>& rhs,
 template <class Num_t = double>
 inline std::vector<Num_t> operator- ( const std::vector<Num_t>& rhs,
                                       const std::vector<Num_t>& lhs ) {
-    error_handler::_VERIFY(rhs.size() == lhs.size());
+    error_handler::_VERIFY(rhs.size() == lhs.size(),
+                           "vectors shouls have the same size");
 
     std::vector<Num_t> result (rhs.size());
     for (unsigned int i {0}; i < rhs.size(); ++i) {
@@ -93,7 +95,8 @@ inline std::vector<Num_t> operator- ( const std::vector<Num_t>& rhs,
 template <class Num_t = double>
 inline std::vector<Num_t>& operator+= ( std::vector<Num_t>& lhs,
                                         const std::vector<Num_t>& rhs ) {
-    error_handler::_VERIFY(rhs.size() == lhs.size());
+    error_handler::_VERIFY(rhs.size() == lhs.size(),
+                           "vectors shouls have the same size");
     for (unsigned int i {0}; i < lhs.size(); ++i) {
         lhs[i] += rhs[i];
     }
