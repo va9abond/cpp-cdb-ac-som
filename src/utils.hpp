@@ -3,6 +3,7 @@
 
 
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include <utility>
 #include <map>
@@ -141,6 +142,17 @@ inline std::vector<Num_t> operator* ( const Num_t scal,
     }
 
     return result;
+}
+
+
+namespace ccout {
+    inline void print (const std::vector<char>& chars) {
+        std::cout << "{ ";
+        for (const auto& c : chars) {
+            std::cout << (int)c << " ";
+        }
+        std::cout << "}\n";
+    }
 }
 
 
