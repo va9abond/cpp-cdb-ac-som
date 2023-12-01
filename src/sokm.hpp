@@ -110,7 +110,7 @@ public:
                                       // competition process
         for (ui neuron_no {0}; neuron_no < neurons.size(); ++neuron_no) {
             double dist = sq_euclidean_distance(sig, neurons[neuron_no].weights);
-            if (dist < min_sq_dist) {
+            if (math::is_double_grt(min_sq_dist, dist)) {
                 min_sq_dist = dist;
                 ix = neuron_no;
             }
@@ -130,7 +130,7 @@ private:
         for (ui i {0}; i < neurons.size(); ++i) {
             double dist = neuron::distance(nw, neurons[i]);
             double hjix = std::exp(- ((dist * dist) / (2 * sq_e_width)) );
-            if (hjix > 0) { // [WARNING]: CHANEGE COMPARISON
+            if (math::is_double_grt(hjix, 0)) {
                 tpn.push_back(&neurons[i]);
             }
         }
@@ -165,21 +165,21 @@ public:
     }
 
     void update_lrate() { // [WARNING]: > for doubles
-        lrate = ( lrate < lrate0 ?
-                          lrate0 :
-                          lrate0 * std::exp(-( (step) / (tau2) )) );
+        lrate = ( math::is_double_grt(lrate0, lrate) ?
+                  lrate0 :
+                  lrate0 * std::exp(-( (step) / (tau2) )) );
     }
 
 
     const ui input_dim;
     const ui feature_dim;
-    const double ewidth0;      // sigma0
-    ui step;                   // learnin step, n
-    const double lrate0 = 0.3; // eta0 0.1
-    const double tau1 = (1000 / std::log10(ewidth0));
-    const double tau2 = 1000;
-    double lrate = 0;          // [TODO]: should be function
-    double ewidth = 0;         // [TODO]: should be function effective width
+    const double ewidth0;       // sigma0
+    ui step;                    // learnin step, n
+    const double lrate0 = 0.3;  // eta0 0.1
+    const double tau1   = (1000 / std::log10(ewidth0)); // ewidth multiplier
+    const double tau2   = 1000; // lrate multiplier
+          double lrate  = 0;    // [TODO]: should be function
+          double ewidth = 0;    // [TODO]: should be function effective width
     std::vector<neuron> neurons; // vector of output(feature)
                                  // neuron layer
 };
