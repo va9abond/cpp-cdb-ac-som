@@ -90,6 +90,17 @@ std::vector<Num_t> operator- ( const std::vector<Num_t>& rhs,
     return result;
 }
 
+template <class Num_t = double>
+std::vector<Num_t>& operator+= ( std::vector<Num_t>& lhs,
+                                 const std::vector<Num_t>& rhs ) {
+    error_handler::_VERIFY(rhs.size() == lhs.size());
+    for (unsigned int i {0}; i < lhs.size(); ++i) {
+        lhs[i] += rhs[i];
+    }
+
+    return lhs;
+}
+
 
 template <class Num_t = double>
 std::vector<Num_t> operator* ( const Num_t scal,
