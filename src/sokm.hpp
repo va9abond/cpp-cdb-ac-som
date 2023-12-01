@@ -1,5 +1,5 @@
-#ifndef NET_HPP
-#define NET_HPP
+#ifndef SOKM_HPP
+#define SOKM_HPP
 
 
 #include "utils.hpp"
@@ -10,7 +10,7 @@ struct neuron {
     using vd   = alias::vd;
 
 
-    neuron (int x, int y, vd&& ws) : coords({x,y}), weights(ws) {}
+    neuron (int x, int y, vd&& ws) : coords({x,y}), weights(std::move(ws)) {}
 
     static double distance (const neuron& lhs, const neuron& rhs) {
         double sq_dist = 0;
@@ -39,7 +39,7 @@ class sokm {
     using vd = alias::vd;
     using vi = alias::vi;
 
-
+public:
     sokm ( ui idim,
            ui fdim,
            ui n, ui m ):
@@ -71,7 +71,7 @@ private:
             for (ui y = 0; y < m; ++y) {
                 neurons.push_back(
                         neuron( x,y,
-                            std::move(construct_neuron_weights()) )
+                            construct_neuron_weights())
                 );
             }
         }
@@ -185,4 +185,4 @@ public:
 };
 
 
-#endif // NET_HPP
+#endif // SOKM_HPP
