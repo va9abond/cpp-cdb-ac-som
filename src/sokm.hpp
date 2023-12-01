@@ -105,13 +105,13 @@ public:
 private:
     // find neuron-winner ix (min euclidean distance)
     // for current input signal
-    neuron& competition (const vd& sig) {
+    neuron& competition (const vd& signal) {
         ui ix = neurons.size(); // no of neuron-winner
         double min_sq_dist = std::numeric_limits<double>::max(); // minimum square distance
 
                                       // competition process
         for (ui neuron_no {0}; neuron_no < neurons.size(); ++neuron_no) {
-            double dist = sq_euclidean_distance(sig, neurons[neuron_no].weights);
+            double dist = sq_euclidean_distance(signal, neurons[neuron_no].weights);
             if (math::is_double_grt(min_sq_dist, dist)) {
                 min_sq_dist = dist;
                 ix = neuron_no;
