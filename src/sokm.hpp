@@ -4,7 +4,8 @@
 
 #include "utils.hpp"
 
-#define DEBUG_PRINT 0
+#define DEBUG_PRINT_TRAIN 0
+#define DEBUG_PRINT_STEP 0
 
 struct neuron {
     using pair = alias::iipair;
@@ -105,7 +106,7 @@ public:
 private:
     // find neuron-winner ix (min euclidean distance)
     // for current input signal
-    neuron& competition (const vd& signal) {
+    const neuron& competition (const vd& signal) const {
         ui ix = neurons.size(); // no of neuron-winner
         double min_sq_dist = std::numeric_limits<double>::max(); // minimum square distance
 
@@ -156,7 +157,9 @@ private:
 
 public:
     void train (const vd& signal) {
-        neuron& neuron_winner = competition(signal);
+        if (step == 0) { printf("step: %u\n", step); }
+
+        const neuron& neuron_winner = competition(signal);
 
         // double sq_ewidth = ewidth * ewidth;
                                       // cooperation process
@@ -172,7 +175,7 @@ public:
 
         updatae_constants();
 // =====================================================
-#if DEBUG_PRINT
+#if DEBUG_PRINT_TRAIN
         using std::cout;
         using std::right;
 
@@ -207,7 +210,19 @@ public:
         return {dist, std::exp(- ((dist * dist) / (2 * sq_ewidth)) )};
     }
 
-    void update_step() { ++step; }
+    void update_step() {
+        ++step;
+
+        // if (step % 500) { std::cout << std::format("step: {}\n", step); }
+        if (step % 500 == 0) {
+            printf("step: %u\n", step);
+#if DEBUG_PRINT_STEP
+
+            std::cout << std::format("lrate: {}\n", lrate);
+            std::cout << std::format("ewidth: {}\n", ewidth);
+#endif
+        }
+    }
 
     void update_ewidth() {
         ewidth = ( step > 1000 ?
@@ -223,7 +238,7 @@ public:
         lrate = lrate0 * std::exp(-( (step) / (tau2) ));
     }
 
-    std::pair<double, double> classify (const vd& signal) {
+    std::pair<double, double> classify (const vd& signal) const {
         return competition(signal).coords;
     }
 
