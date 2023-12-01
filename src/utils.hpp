@@ -63,6 +63,33 @@ namespace error_handler {
 }
 
 
+namespace math {
+    static const int32_t kMaxUlps = 4;
+
+    inline bool almost_equal (double x, double y, int32_t maxUlps = kMaxUlps) {
+        error_handler::_VERIFY(maxUlps > 0 && maxUlps < 4 * 1024 * 1024, "almost_equal: invalid maxUlps");
+
+        int aInt = *(int*)&x;
+        if (aInt < 0) // Make aInt lexicographically ordered as a twos-complement int
+            aInt = 0x80000000 - aInt;
+
+        int bInt = *(int*)&y;
+        if (bInt < 0) // Make bInt lexicographically ordered as a twos-complement int
+            bInt = 0x80000000 - bInt;
+
+        int intDiff = abs(aInt - bInt);
+        if (intDiff <= maxUlps)
+            return true;
+
+        return false;
+    }
+
+    inline bool is_double_grt (double x, double y) {
+        return ( x > y + std::numeric_limits<double>::epsilon() );
+    }
+}
+
+
 template <class Num_t = double>
 inline std::vector<Num_t> operator+ ( const std::vector<Num_t>& rhs,
                                       const std::vector<Num_t>& lhs ) {
