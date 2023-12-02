@@ -1478,21 +1478,23 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 вычислительный нейрон может быть представлен структурой описанной в
 листинге \ref{code:neuron}.
 
-\begin{listing}[!ht]
+\begin{longlisting}
     \inputminted{cpp}{code/struct_neuron.hpp}
     \caption{Реализация вычислительного нейрона карты}
     \label{code:neuron}
-\end{listing}
+\end{longlisting}
+\vspace{5mm}
 
 Дальше нам понадобиться определять равные между собой нейроны и
 определять меньший из них, поэтому так же реализуем нужные бинарные
 операции сравнения см. листинг \ref{code:comp_neuron}.
 
-\begin{listing}[!ht]
+\begin{longlisting}
     \inputminted{cpp}{code/comp_neuron.hpp}
     \caption{Бинарные операций сравнения \textbf{struct neuron} }
     \label{code:comp_neuron}
-\end{listing}
+\end{longlisting}
+\vspace{5mm}
 
 Начнем реализовывать структуру для описания самой карты. Поскольку
 к каждому типу нейронной сети необходим индивидуальный подход нет
@@ -1500,42 +1502,46 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 механизмы наследования. Давайте начнем реализовать наш
 \verb|class sokm| см. листинг \ref{code:base_sokm}.
 
-\begin{listing}
+\begin{longlisting}
     \inputminted{cpp}{code/base_sokm.hpp}
     \caption{Код части реализации \textbf{class sokm} }
     \label{code:base_sokm}
-\end{listing}
+\end{longlisting}
+\vspace{5mm}
 
 Обновление введенных констант будет происходить с помощью функций
 представленные в листинге \ref{code:constants_update}.
 
-\begin{listing}
-    \inputminted{cpp}{code/utils.hpp}
+\begin{longlisting}
+    \inputminted{cpp}{code/constants_update.hpp}
     \caption{Код реализующий обновление констант}
     \label{code:constants_update}
-\end{listing}
+\end{longlisting}
+\vspace{5mm}
 
 Мы обсудили, что процесс обучения нейронной сети сводится к основным
 модулям процессу адаптации, процессу кооперации и процессу адаптации
 каждый из них может быть реализован по отдельности как показано в
 листинге \ref{code:train_less}.
 
-\begin{listing}
+\begin{longlisting}
     \inputminted{cpp}{code/train_less.hpp}
     \caption{Раздельная реализации основных этапов обучения сети}
     \label{code:train_less}
-\end{listing}
+\end{longlisting}
+\vspace{5mm}
 
 Однако в целях улучшения производительности кода мы поместим
 реализации процессов кооперации и адаптации в одну функцию
 \verb|train()|, показанную в листинге \ref{code:train}. Она же и станет
 основной функцией обучения нашей самоорганизующейся карты.
 
-\begin{listing}
+\begin{longlisting}
     \inputminted{cpp}{code/train.hpp}
     \caption{Реализации функции \textbf{train()}}
     \label{code:train}
-\end{listing}
+\end{longlisting}
+\vspace{5mm}
 
 Для вычисления топологической окрестности нейрона использовалась
 функция \verb|hji()|, а для вычисления квадрата евклидова расстояния
@@ -1543,11 +1549,12 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 \verb|sq_euclidean_distance()|. Обе эти функции представлены в листинге
 \ref{code:hji}.
 
-\begin{listing}
+\begin{longlisting}
     \inputminted{cpp}{code/train.hpp}
     \caption{Реализации функций \textbf{hji()} и \textbf{sq\_euclidean\_distance()}}
     \label{code:hji}
-\end{listing}
+\end{longlisting}
+\vspace{5mm}
 
 Реализации чтения данных для обучения и места входа программы (\verb|main()|)
 представлены в листингах \ref{code:full_sokm}
@@ -1558,22 +1565,25 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 
 \chapter{Приложение} \label{sec:appendix}
 
-\begin{listing}
+\begin{longlisting}
     \inputminted{cpp}{code/utils.hpp}
     \caption{Полный код реализации вспомогательных пространств имен}
     \label{code:full_utils}
-\end{listing}
+\end{longlisting}
+\vspace{5mm}
 
-\begin{listing}
+\begin{longlisting}
     \inputminted{cpp}{code/sokm.hpp}
     \caption{Полный код реализации \textbf{struct neuron} и \textbf{class sokm}}
     \label{code:full_sokm}
-\end{listing}
+\end{longlisting}
+\vspace{5mm}
 
-\begin{listing}
+\begin{longlisting}
     \inputminted{cpp}{code/main.cpp}
     \caption{Полный код основной вызывающей функции \textbf{main()}}
     \label{code:full_main}
-\end{listing}
+\end{longlisting}
+\vspace{5mm}
 
 \end{document}
