@@ -223,16 +223,16 @@ public:
 
     void update_step() {
         ++step;
-
-        // if (step % 500) { std::cout << std::format("step: {}\n", step); }
-        if (step % 500 == 0) {
-            printf("step: %u\n", step);
+        if (step % 500 == 0) { std::cout <<
+            std::format("epoch: {} step: {}\n", epoch, step); }
 #if DEBUG_PRINT_STEP
-
-            std::cout << std::format("lrate: {}\n", lrate);
-            std::cout << std::format("ewidth: {}\n", ewidth);
+        std::cout << std::format("lrate: {}\n", lrate);
+        std::cout << std::format("ewidth: {}\n", ewidth);
 #endif
-        }
+    }
+
+    void update_epoch() {
+        ++epoch;
     }
 
     void update_ewidth() {
@@ -258,6 +258,7 @@ public:
     const ui feature_dim;
     const double ewidth0;       // sigma0
     ui step;                    // learnin step, n
+    ui epoch = 1;
     const double lrate0 = 0.3;  // eta0 0.1
     const double tau1   = (1000 / std::log10(ewidth0)); // ewidth multiplier
     const double tau2   = 1000; // lrate multiplier
