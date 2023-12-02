@@ -170,12 +170,13 @@ namespace ccout {
 
 namespace vec_utils {
     template <class Valty>
-    inline std::vector<double> convert_to_doubles (
+    inline std::vector<double> normalize_vector (
             const std::vector<Valty>& vals
     ) {
         std::vector<double> result(vals.size());
         for (unsigned int i = 0; i < vals.size(); ++i) {
-            result[i] = (double)vals[i];
+            // result[i] = (double)vals[i];
+            result[i] = ((int)vals[i] == 0 ? 0.0 : 255.0);
         }
 
         return result;
