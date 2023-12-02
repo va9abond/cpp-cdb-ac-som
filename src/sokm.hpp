@@ -3,6 +3,7 @@
 
 
 #include "utils.hpp"
+#include "read_mnist.hpp"
 
 #define DEBUG_PRINT_TRAIN 0
 #define DEBUG_PRINT_STEP 0
@@ -38,11 +39,7 @@ inline bool operator< (const neuron& lhs, const neuron& rhs) {
     const auto& [x1,y1] = lhs.coords;
     const auto& [x2,y2] = rhs.coords;
 
-    if (x1 == x2) {
-        return (y1 < y2);
-    }
-
-    return (x1 < x2);
+    return (x1 == x2 ? y1 < y2 : x1 < x2);
 }
 
 
@@ -296,6 +293,126 @@ namespace ccout { // custom console output
 
         printf("}\n");
     }
+}
+
+
+void sokm_education_mnist (sokm& map, std::string file_path, alias::ui epochs = 1) {
+    std::ifstream file (file_path, std::ios::in | std::ios::binary);
+
+    if (file.is_open()) {
+        uint32_t magic = 0;
+        uint32_t num_items = 0;
+        uint32_t rows = 0;
+        uint32_t cols = 0;
+
+        file.read(reinterpret_cast<char*>(&magic), 4);
+        magic = mnist::swap_endian(magic);
+        error_handler::_VERIFY(magic == 2051, "incorrect image file magic");
+
+        file.read(reinterpret_cast<char*>(&num_items), 4);
+        num_items = mnist::swap_endian(num_items);
+
+        file.read(reinterpret_cast<char*>(&rows), 4);
+        rows = mnist::swap_endian(rows);
+
+        file.read(reinterpret_cast<char*>(&cols), 4);
+        cols = mnist::swap_endian(cols);
+
+        std::cout << std::format("Images: {}\n", num_items);
+        std::cout << std::format("\tRows: {}\n", rows);
+        std::cout << std::format("\tCols: {}\n", cols);
+
+        char* pixels = new char[rows * cols];
+        while (epochs --> 0) {
+            for (int item = 0; item < num_items; ++item) {
+                file.read(pixels, rows*cols);
+
+                std::vector<char> vector_chars (
+                        pixels, pixels + rows*cols
+                );
+
+                map.train(vec_utils::normalize_vector(vector_chars));
+            }
+            map.update_epoch();
+        }
+        delete[] pixels;
+    }
+}
+
+
+decltype(auto) sokm_check_mnist ( const sokm& map,
+                       std::string images_path,
+                       std::string labels_path ) {
+    using alias::ui;
+
+    std::ifstream images_file (images_path, std::ios::in | std::ios::binary);
+    std::ifstream labels_file (labels_path, std::ios::in | std::ios::binary);
+
+    std::map<alias::iipair, alias::vi> marks;
+    for (const auto& n : map.neurons) {
+        marks.emplace( n.coords, alias::vi{} );
+    }
+
+    if (images_file.is_open()) {
+        uint32_t magic = 0;
+        uint32_t num_items = 0;
+        uint32_t num_labels = 0;
+        uint32_t rows = 0;
+        uint32_t cols = 0;
+
+        images_file.read(reinterpret_cast<char*>(&magic), 4);
+        magic = mnist::swap_endian(magic);
+        error_handler::_VERIFY(magic == 2051,
+                "incorrect image file magic");
+
+        labels_file.read(reinterpret_cast<char*>(&magic), 4);
+        magic = mnist::swap_endian(magic);
+        error_handler::_VERIFY(magic == 2049,
+                "incorrect label file magic");
+
+        images_file.read(reinterpret_cast<char*>(&num_items), 4);
+        num_items = mnist::swap_endian(num_items);
+
+        labels_file.read(reinterpret_cast<char*>(&num_labels), 4);
+        num_labels = mnist::swap_endian(num_labels);
+        std::cout << std::format("labels: {}, items: {}\n",
+                num_labels, num_items);
+        error_handler::_VERIFY(num_items == num_labels,
+                "numbers of labels and items doest't match");
+
+        images_file.read(reinterpret_cast<char*>(&rows), 4);
+        rows = mnist::swap_endian(rows);
+
+        images_file.read(reinterpret_cast<char*>(&cols), 4);
+        cols = mnist::swap_endian(cols);
+
+        std::cout << std::format("Images: {}\n", num_items);
+        std::cout << std::format("\tRows: {}\n", rows);
+        std::cout << std::format("\tCols: {}\n", cols);
+
+        char label_char;
+        char* pixels = new char[rows * cols];
+
+        for (int item = 0; item < num_items; ++item) {
+            images_file.read(pixels, rows*cols);
+            labels_file.read(&label_char, 1);
+            int label = std::stoi(std::to_string(int(label_char)));
+
+            std::vector<char> vector_chars (
+                    pixels, pixels + rows*cols
+            );
+
+            auto coords = map.classify (
+                    vec_utils::normalize_vector(vector_chars)
+            );
+
+            marks.at(coords).push_back(label);
+        }
+
+        delete[] pixels;
+    }
+
+    return marks;
 }
 
 
