@@ -37,7 +37,7 @@ void sokm_education_mnist (sokm& map, std::string file_path) {
                     pixels, pixels + rows*cols
             );
 
-            map.train(vec_utils::convert_to_doubles(vector_chars));
+            map.train(vec_utils::normalize_vector(vector_chars));
         }
 
         delete[] pixels;
@@ -52,7 +52,11 @@ decltype(auto) sokm_check_mnist ( const sokm& map,
 
     std::ifstream images_file (images_path, std::ios::in | std::ios::binary);
     std::ifstream labels_file (labels_path, std::ios::in | std::ios::binary);
-    std::vector<std::vector<alias::iipair>> marks(10);
+
+    std::map<alias::iipair, alias::vi> marks;
+    for (const auto& n : map.neurons) {
+        marks.emplace( n.coords, alias::vi{} );
+    }
 
     if (images_file.is_open()) {
         uint32_t magic = 0;
@@ -94,8 +98,6 @@ decltype(auto) sokm_check_mnist ( const sokm& map,
         char label_char;
         char* pixels = new char[rows * cols];
 
-        // ui errors = 0;
-
         for (int item = 0; item < num_items; ++item) {
             images_file.read(pixels, rows*cols);
             labels_file.read(&label_char, 1);
@@ -106,10 +108,10 @@ decltype(auto) sokm_check_mnist ( const sokm& map,
             );
 
             auto coords = map.classify (
-                    vec_utils::convert_to_doubles(vector_chars)
+                    vec_utils::normalize_vector(vector_chars)
             );
 
-            marks[label].push_back(coords);
+            marks.at(coords).push_back(label);
         }
 
         delete[] pixels;
@@ -126,21 +128,34 @@ int main() {
             "../data/t10k-images-idx3-ubyte",
             "../data/t10k-labels-idx1-ubyte" );
 
-    // print marks
-    for (unsigned int label = 0; label < 10; ++label) {
-        auto size = marks[label].size();
+    using std::cout;
+    using std::right;
+    using std::left;
+    using std::format;
 
-        std::cout << std::format("[label: {}, size: {}] ",
-                label, size);
+    std::vector<int> checker(10, 0);
+    alias::ui fsize = 0;
 
-        alias::ui i = 1;
-        while (i <= 10) {
-            ccout::print(marks[label].at(size - i));
-            ++i;
+    for (const auto& [coords, labels] : marks) {
+        cout << format("({},{}) size: {}\n", coords.first, coords.second, labels.size());
+        for (int l = 0; l < 5; ++l) {
+            auto size1 = count(labels.begin(), labels.end(), l);
+            auto size2 = count(labels.begin(), labels.end(), (9-l));
+
+            cout << "\t"; cout.width(11); cout << left << format("[{}]: {}", l, size1);
+            cout << left << format("[{}]: {}\n", (9-l), size2);
+
+            fsize += size1; checker[l] += size1;
+            fsize += size2; checker[9-l] += size2;
         }
-
-        printf("\n");
     }
+
+    cout << format("Total number: {}\n", fsize);
+    for (alias::ui i = 0; i < 5; ++i) {
+        cout << "\t"; cout.width(12); cout << left << format("[{}]: {}", i, checker[i]);
+        cout << format("[{}]: {}\n", (9-i), checker[9-i]);
+    }
+
 
 
     return 0;
