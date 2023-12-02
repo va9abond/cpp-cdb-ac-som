@@ -34,6 +34,17 @@ inline bool operator== (const neuron& lhs, const neuron& rhs) {
     return (lhs.coords == rhs.coords);
 }
 
+inline bool operator< (const neuron& lhs, const neuron& rhs) {
+    const auto& [x1,y1] = lhs.coords;
+    const auto& [x2,y2] = rhs.coords;
+
+    if (x1 == x2) {
+        return (y1 < y2);
+    }
+
+    return (x1 < x2);
+}
+
 
 class sokm {
     using ui = unsigned int;
@@ -238,7 +249,7 @@ public:
         lrate = lrate0 * std::exp(-( (step) / (tau2) ));
     }
 
-    std::pair<double, double> classify (const vd& signal) const {
+    std::pair<int, int> classify (const vd& signal) const {
         return competition(signal).coords;
     }
 
