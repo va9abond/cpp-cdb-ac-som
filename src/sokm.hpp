@@ -207,6 +207,7 @@ public:
 // =====================================================
     };
 
+private:
     void updatae_constants() {
         update_step();
         update_lrate();
@@ -246,10 +247,12 @@ public:
         lrate = lrate0 * std::exp(-( (step) / (tau2) ));
     }
 
+public:
     std::pair<int, int> classify (const vd& signal) const {
         return competition(signal).coords;
     }
 
+    friend void sokm_education_mnist (sokm& map, std::string file_path, alias::ui epochs);
 
     const ui input_dim;
     const ui feature_dim;
