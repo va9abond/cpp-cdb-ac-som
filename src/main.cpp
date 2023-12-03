@@ -4,7 +4,7 @@
 int main() {
 
     sokm map (28*28, 10, 2, 5);
-    sokm_education_mnist(map, "../data/train-images-idx3-ubyte", 2);
+    sokm_education_mnist(map, "../data/train-images-idx3-ubyte", 2, 1);
     const auto marks = sokm_check_mnist ( map,
             "../data/t10k-images-idx3-ubyte",
             "../data/t10k-labels-idx1-ubyte" );
@@ -18,12 +18,12 @@ int main() {
     alias::ui fsize = 0;
 
     for (const auto& [coords, labels] : marks) {
-        cout << format("({},{}) size: {}\n", coords.first, coords.second, labels.size());
+        cout << format("({},{}); size: {}\n", coords.first, coords.second, labels.size());
         for (int l = 0; l < 5; ++l) {
             auto size1 = count(labels.begin(), labels.end(), l);
             auto size2 = count(labels.begin(), labels.end(), (9-l));
 
-            cout << "\t"; cout.width(11); cout << left << format("[{}]: {}", l, size1);
+            cout << "\t"; cout.width(11); cout << left << format("[{}]: {};", l, size1);
             cout << left << format("[{}]: {}\n", (9-l), size2);
 
             fsize += size1; checker[l] += size1;

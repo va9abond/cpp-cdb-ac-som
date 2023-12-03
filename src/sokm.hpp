@@ -252,7 +252,7 @@ public:
         return competition(signal).coords;
     }
 
-    friend void sokm_education_mnist (sokm& map, std::string file_path, alias::ui epochs);
+    friend void sokm_education_mnist (sokm&, std::string_view, alias::ui, alias::ui);
 
     const ui input_dim;
     const ui feature_dim;
@@ -299,8 +299,8 @@ namespace ccout { // custom console output
 }
 
 
-void sokm_education_mnist (sokm& map, std::string file_path, alias::ui epochs = 1) {
-    std::ifstream file (file_path, std::ios::in | std::ios::binary);
+void sokm_education_mnist (sokm& map, std::string_view file_path, alias::ui epochs = 1, alias::ui mult = 1) {
+    std::ifstream file (file_path.data(), std::ios::in | std::ios::binary);
 
     if (file.is_open()) {
         uint32_t magic = 0;
@@ -327,7 +327,7 @@ void sokm_education_mnist (sokm& map, std::string file_path, alias::ui epochs = 
 
         char* pixels = new char[rows * cols];
         while (epochs --> 0) {
-            for (int item = 0; item < num_items; ++item) {
+            for (uint32_t item = 0; item < (num_items / mult); ++item) {
                 file.read(pixels, rows*cols);
 
                 std::vector<char> vector_chars (
@@ -344,12 +344,12 @@ void sokm_education_mnist (sokm& map, std::string file_path, alias::ui epochs = 
 
 
 decltype(auto) sokm_check_mnist ( const sokm& map,
-                       std::string images_path,
-                       std::string labels_path ) {
+                       std::string_view images_path,
+                       std::string_view labels_path ) {
     using alias::ui;
 
-    std::ifstream images_file (images_path, std::ios::in | std::ios::binary);
-    std::ifstream labels_file (labels_path, std::ios::in | std::ios::binary);
+    std::ifstream images_file (images_path.data(), std::ios::in | std::ios::binary);
+    std::ifstream labels_file (labels_path.data(), std::ios::in | std::ios::binary);
 
     std::map<alias::iipair, alias::vi> marks;
     for (const auto& n : map.neurons) {
@@ -396,10 +396,10 @@ decltype(auto) sokm_check_mnist ( const sokm& map,
         char label_char;
         char* pixels = new char[rows * cols];
 
-        for (int item = 0; item < num_items; ++item) {
+        for (uint32_t item = 0; item < num_items; ++item) {
             images_file.read(pixels, rows*cols);
             labels_file.read(&label_char, 1);
-            int label = std::stoi(std::to_string(int(label_char)));
+            int label = (int)label_char;
 
             std::vector<char> vector_chars (
                     pixels, pixels + rows*cols
