@@ -116,7 +116,7 @@ private:
     // for current input signal
     const neuron& competition (const vd& signal) const {
         ui ix = neurons.size(); // no of neuron-winner
-        double min_sq_dist = std::numeric_limits<double>::max(); // minimum square distance
+        double min_sq_dist = std::numeric_limits<double>::max();
 
                                       // competition process
         for (ui neuron_no {0}; neuron_no < neurons.size(); ++neuron_no) {
@@ -148,7 +148,10 @@ private:
         return tpn;
     };
 
-    void adaptation (const vd& sig, const neuron& nw, const std::vector<neuron*>& tpn) {
+    void adaptation (
+            const vd& sig, const neuron& nw,
+            const std::vector<neuron*>& tpn
+    ) {
         double sq_e_width = ewidth * ewidth;
                                        // adaptation process
         for (ui i {0}; i < tpn.size(); ++i) {
@@ -207,6 +210,7 @@ public:
 // =====================================================
     };
 
+private:
     void updatae_constants() {
         update_step();
         update_lrate();
@@ -246,11 +250,16 @@ public:
         lrate = lrate0 * std::exp(-( (step) / (tau2) ));
     }
 
+public:
     std::pair<int, int> classify (const vd& signal) const {
         return competition(signal).coords;
     }
 
+    friend void sokm_education_mnist (sokm& map,
+                                      std::string file_path,
+                                      alias::ui epochs);
 
+private:
     const ui input_dim;
     const ui feature_dim;
     const double ewidth0;       // sigma0

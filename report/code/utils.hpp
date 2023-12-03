@@ -68,14 +68,17 @@ namespace math {
     static const int32_t kMaxUlps = 4;
 
     inline bool almost_equal (double x, double y, int32_t maxUlps = kMaxUlps) {
-        error_handler::_VERIFY(maxUlps > 0 && maxUlps < 4 * 1024 * 1024, "almost_equal: invalid maxUlps");
+        error_handler::_VERIFY(maxUlps > 0 && maxUlps < 4 * 1024 * 1024,
+                "almost_equal: invalid maxUlps");
 
         int aInt = *(int*)&x;
-        if (aInt < 0) // Make aInt lexicographically ordered as a twos-complement int
+        if (aInt < 0) // Make aInt lexicographically ordered as
+                      // a twos-complement int
             aInt = 0x80000000 - aInt;
 
         int bInt = *(int*)&y;
-        if (bInt < 0) // Make bInt lexicographically ordered as a twos-complement int
+        if (bInt < 0) // Make bInt lexicographically ordered as
+                      // a twos-complement int
             bInt = 0x80000000 - bInt;
 
         int intDiff = abs(aInt - bInt);
