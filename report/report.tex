@@ -10,11 +10,12 @@
 \input{macros}
 \input{letterfonts}
 
+
 \title{Отчет по курсовой работе\\"Построение нейронной сети Кохонена"}
 \author{КМБО-01-21, Рустем Сиразетдинов}
 
-\begin{document}
 
+\begin{document}
     \maketitle
     \newpage
     \tableofcontents
@@ -1478,22 +1479,22 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 вычислительный нейрон может быть представлен структурой описанной в
 листинге \ref{code:neuron}.
 
-\begin{longlisting}
+\begin{code}
     \inputminted{cpp}{code/struct_neuron.hpp}
     \caption{Реализация вычислительного нейрона карты}
     \label{code:neuron}
-\end{longlisting}
+\end{code}
 \vspace{5mm}
 
 Дальше нам понадобиться определять равные между собой нейроны и
 определять меньший из них, поэтому так же реализуем нужные бинарные
 операции сравнения см. листинг \ref{code:comp_neuron}.
 
-\begin{longlisting}
+\begin{code}
     \inputminted{cpp}{code/comp_neuron.hpp}
     \caption{Бинарные операций сравнения \textbf{struct neuron} }
     \label{code:comp_neuron}
-\end{longlisting}
+\end{code}
 \vspace{5mm}
 
 Начнем реализовывать структуру для описания самой карты. Поскольку
@@ -1502,21 +1503,21 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 механизмы наследования. Давайте начнем реализовать наш
 \verb|class sokm| см. листинг \ref{code:base_sokm}.
 
-\begin{longlisting}
+\begin{code}
     \inputminted{cpp}{code/base_sokm.hpp}
     \caption{Код части реализации \textbf{class sokm} }
     \label{code:base_sokm}
-\end{longlisting}
+\end{code}
 \vspace{5mm}
 
 Обновление введенных констант будет происходить с помощью функций
 представленные в листинге \ref{code:constants_update}.
 
-\begin{longlisting}
+\begin{code}
     \inputminted{cpp}{code/constants_update.hpp}
     \caption{Код реализующий обновление констант}
     \label{code:constants_update}
-\end{longlisting}
+\end{code}
 \vspace{5mm}
 
 Мы обсудили, что процесс обучения нейронной сети сводится к основным
@@ -1524,11 +1525,11 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 каждый из них может быть реализован по отдельности как показано в
 листинге \ref{code:train_less}.
 
-\begin{longlisting}
+\begin{code}
     \inputminted{cpp}{code/train_less.hpp}
     \caption{Раздельная реализации основных этапов обучения сети}
     \label{code:train_less}
-\end{longlisting}
+\end{code}
 \vspace{5mm}
 
 Однако в целях улучшения производительности кода мы поместим
@@ -1536,11 +1537,11 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 \verb|train()|, показанную в листинге \ref{code:train}. Она же и станет
 основной функцией обучения нашей самоорганизующейся карты.
 
-\begin{longlisting}
+\begin{code}
     \inputminted{cpp}{code/train.hpp}
     \caption{Реализации функции \textbf{train()}}
     \label{code:train}
-\end{longlisting}
+\end{code}
 \vspace{5mm}
 
 Для вычисления топологической окрестности нейрона использовалась
@@ -1549,41 +1550,232 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 \verb|sq_euclidean_distance()|. Обе эти функции представлены в листинге
 \ref{code:hji}.
 
-\begin{longlisting}
+\begin{code}
     \inputminted{cpp}{code/train.hpp}
     \caption{Реализации функций \textbf{hji()} и \textbf{sq\_euclidean\_distance()}}
     \label{code:hji}
-\end{longlisting}
+\end{code}
 \vspace{5mm}
 
-Реализации чтения данных для обучения и места входа программы (\verb|main()|)
+Реализации чтения данных для обучения и места входа программы \verb|main()|
 представлены в листингах \ref{code:full_sokm}
 и \ref{code:full_main} в разделе \nameref{sec:appendix}.
 
 \chapter{Заключение}
+\section{Работа нейронной сети}
+Мы разобрали теоретическую часть работы нейронной сети Кохонена и
+реализовали эту модель в виде программного кода. Пришло время
+проверить ее в действии. Нашей первоначальной задачей была
+классификация цифр. Для обучения и проверки нашей нейронной сети мы
+будем пользоваться набором данным MNIST TODO. Этот набор состоит из
+отцифрованных изображений
+рукописных цифр от 0 до 9 см. рис. \ref{fig:mnist_ex} и отметок -
+самих цифр, необходимых, например, для проверки или для обучения с
+учителем.
 
+\begin{figure}[!htb]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=\textwidth]{mnist_plot.png}
+    \caption{Элементы набора данных \textbf{MNIST}}
+    \label{fig:mnist_ex}
+\end{figure}
+
+Каждое изображение имеет размер 28 на 28 пикселей, мы будет
+обучать нашу нейронную сеть с помощью векторов сигналов из 784
+элементов, каждому элементу будет соответствовать пиксель, если
+пиксель черный, то элемент будет равен 0, если же пиксель белый или
+имеет оттенок серого цвета, то соответствующий элемент входного
+вектора сигнала будет иметь значение 255. Набор для обучения нейронной
+сети может включать до 60000 входных сигналов, а для проверки до
+10000. Для начала давайте проверим, как работает наша необученная
+нейронная сеть на тестовом наборе. Итоги работы нейронной сети
+приведены в таблице \ref{tab:res_no_educ}. Изображения делятся на классы по по
+изображенной на них цифре. Наша нейронная сеть сопоставляет
+изображение некоторому конкретному классу.
+
+\begin{longtable}[c]{llll}
+\rowcolor[HTML]{D9D9D9} 
+\multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(0,0)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 1928} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(1,0)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 451} \\
+\endfirsthead
+%
+\endhead
+%
+{[}0{]}: 310 & {[}9{]}: 167 & {[}0{]}: 88 & {[}9{]}: 58 \\
+{[}1{]}: 25 & {[}8{]}: 153 & {[}1{]}: 46 & {[}8{]}: 16 \\
+{[}2{]}: 94 & {[}7{]}: 73 & {[}2{]}: 45 & {[}7{]}: 28 \\
+{[}3{]}: 34 & {[}6{]}: 590 & {[}3{]}: 10 & {[}6{]}: 62 \\
+{[}4{]}: 398 & {[}5{]}: 84 & {[}4{]}: 79 & {[}5{]}: 19 \\
+\rowcolor[HTML]{D9D9D9} 
+\multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(0,1)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 153} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(1,1)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 1571} \\
+{[}0{]}: 2 & {[}9{]}: 57 & {[}0{]}: 265 & {[}9{]}: 230 \\
+{[}1{]}: 10 & {[}8{]}: 4 & {[}1{]}: 7 & {[}8{]}: 86 \\
+{[}2{]}: 26 & {[}7{]}: 8 & {[}2{]}: 115 & {[}7{]}: 368 \\
+{[}3{]}: 6 & {[}6{]}: 2 & {[}3{]}: 282 & {[}6{]}: 42 \\
+{[}4{]}: 33 & {[}5{]}: 5 & {[}4{]}: 69 & {[}5{]}: 107 \\
+\rowcolor[HTML]{D9D9D9} 
+\multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(0,2)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 215} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(1,2)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 887} \\
+{[}0{]}: 3 & {[}9{]}: 17 & {[}0{]}: 4 & {[}9{]}: 256 \\
+{[}1{]}: 31 & {[}8{]}: 11 & {[}1{]}: 3 & {[}8{]}: 64 \\
+{[}2{]}: 38 & {[}7{]}: 49 & {[}2{]}: 10 & {[}7{]}: 80 \\
+{[}3{]}: 19 & {[}6{]}: 1 & {[}3{]}: 85 & {[}6{]}: 58 \\
+{[}4{]}: 25 & {[}5{]}: 21 & {[}4{]}: 205 & {[}5{]}: 122 \\
+\rowcolor[HTML]{D9D9D9} 
+\multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(0,3)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 95} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(1,3)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 4420} \\
+{[}0{]}: 0 & {[}9{]}: 8 & {[}0{]}: 287 & {[}9{]}: 212 \\
+{[}1{]}: 0 & {[}8{]}: 1 & {[}1{]}: 942 & {[}8{]}: 638 \\
+{[}2{]}: 4 & {[}7{]}: 39 & {[}2{]}: 592 & {[}7{]}: 377 \\
+{[}3{]}: 8 & {[}6{]}: 5 & {[}3{]}: 547 & {[}6{]}: 170 \\
+{[}4{]}: 29 & {[}5{]}: 1 & {[}4{]}: 126 & {[}5{]}: 529 \\
+\rowcolor[HTML]{D9D9D9} 
+\multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(0,4)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 198} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(1,4)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 82} \\
+{[}0{]}: 18 & {[}9{]}: 3 & {[}0{]}: 3 & {[}9{]}: 1 \\
+{[}1{]}: 30 & {[}8{]}: 1 & {[}1{]}: 41 & {[}8{]}: 0 \\
+{[}2{]}: 103 & {[}7{]}: 5 & {[}2{]}: 5 & {[}7{]}: 1 \\
+{[}3{]}: 0 & {[}6{]}: 25 & {[}3{]}: 19 & {[}6{]}: 3 \\
+{[}4{]}: 13 & {[}5{]}: 0 & {[}4{]}: 5 & {[}5{]}: 4 \\
+\caption{Результат работы необученной карты}
+\label{tab:res_no_educ}\\
+\end{longtable}
+
+Из таблицы видно, что нейронная сеть достаточно плохо справилась с
+задачей классификации. На самом деле смотреть на работу необученной
+нейронной сети не совсем интересно. Давайте теперь обучим нашу
+нейронную сеть на 60000 тренировочных примерах в 2 эпохи обучения.
+Полученные результаты представлены в таблице \ref{tab:res_educ}.
+
+\begin{longtable}[c]{llll}
+\rowcolor[HTML]{D9D9D9}
+\multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(0,0)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 1371} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(1,0)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 923} \\
+\endfirsthead
+%
+\endhead
+%
+\endfoot
+%
+\endlastfoot
+%
+{[}0{]}: 2 & {[}9{]}: 362 & {[}0{]}: 0 & {[}9{]}: 74 \\
+{[}1{]}: 0 & {[}8{]}: 87 & {[}1{]}: 564 & {[}8{]}: 20 \\
+{[}2{]}: 6 & {[}7{]}: 528 & {[}2{]}: 14 & {[}7{]}: 143 \\
+{[}3{]}: 12 & {[}6{]}: 0 & {[}3{]}: 33 & {[}6{]}: 2 \\
+{[}4{]}: 290 & {[}5{]}: 84 & {[}4{]}: 37 & {[}5{]}: 36 \\
+\rowcolor[HTML]{D9D9D9} 
+\multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(0,1)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 1443} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(1,1)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 870} \\
+{[}0{]}: 1 & {[}9{]}: 504 & {[}0{]}: 2 & {[}9{]}: 12 \\
+{[}1{]}: 0 & {[}8{]}: 53 & {[}1{]}: 555 & {[}8{]}: 42 \\
+{[}2{]}: 22 & {[}7{]}: 275 & {[}2{]}: 24 & {[}7{]}: 55 \\
+{[}3{]}: 49 & {[}6{]}: 10 & {[}3{]}: 3 & {[}6{]}: 23 \\
+{[}4{]}: 477 & {[}5{]}: 52 & {[}4{]}: 42 & {[}5{]}: 112 \\
+\rowcolor[HTML]{D9D9D9} 
+\multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(0,2)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 637} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(1,2)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 1032} \\
+{[}0{]}: 9 & {[}9{]}: 1 & {[}0{]}: 8 & {[}9{]}: 9 \\
+{[}1{]}: 10 & {[}8{]}: 51 & {[}1{]}: 6 & {[}8{]}: 485 \\
+{[}2{]}: 188 & {[}7{]}: 8 & {[}2{]}: 178 & {[}7{]}: 8 \\
+{[}3{]}: 36 & {[}6{]}: 269 & {[}3{]}: 184 & {[}6{]}: 6 \\
+{[}4{]}: 36 & {[}5{]}: 29 & {[}4{]}: 0 & {[}5{]}: 148 \\
+\rowcolor[HTML]{D9D9D9} 
+\multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(0,3)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 763} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(1,3)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 1257} \\
+{[}0{]}: 57 & {[}9{]}: 2 & {[}0{]}: 29 & {[}9{]}: 7 \\
+{[}1{]}: 0 & {[}8{]}: 26 & {[}1{]}: 0 & {[}8{]}: 181 \\
+{[}2{]}: 503 & {[}7{]}: 7 & {[}2{]}: 21 & {[}7{]}: 0 \\
+{[}3{]}: 40 & {[}6{]}: 99 & {[}3{]}: 647 & {[}6{]}: 3 \\
+{[}4{]}: 6 & {[}5{]}: 23 & {[}4{]}: 0 & {[}5{]}: 369 \\
+\rowcolor[HTML]{D9D9D9} 
+\multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(0,4)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 790} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}(1,4)} & \multicolumn{1}{c}{\cellcolor[HTML]{D9D9D9}size: 914} \\
+{[}0{]}: 46 & {[}9{]}: 30 & {[}0{]}: 826 & {[}9{]}: 8 \\
+{[}1{]}: 0 & {[}8{]}: 10 & {[}1{]}: 0 & {[}8{]}: 19 \\
+{[}2{]}: 58 & {[}7{]}: 3 & {[}2{]}: 18 & {[}7{]}: 1 \\
+{[}3{]}: 1 & {[}6{]}: 536 & {[}3{]}: 5 & {[}6{]}: 10 \\
+{[}4{]}: 94 & {[}5{]}: 12 & {[}4{]}: 0 & {[}5{]}: 27 \\
+\caption{Результат работы обученной карты}
+\label{tab:res_educ}\\
+\end{longtable}
+
+Как мы видим из результатов, то обученная самоорганизующаяся карты
+справляется с задачей классификации намного лучше. Однако стоит
+отметить важные моменты. У нашей карты возникают некоторые сложности,
+например, цифры классов 9, 4, 7, или 6, 2 или 3, 5 сложны для определения см.
+рис. \ref{fig:mnist_2}. И в тоже время она достаточно хорошо
+справляется с определением классов 0 и 1, иногда путая 1 и 7.
+
+
+\begin{figure}[!htb]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=\textwidth]{mnist_2.png}
+    \caption{Элементы набора данных \textbf{MNIST}}
+    \label{fig:mnist_2}
+\end{figure}
+
+
+
+\section{Рекомендации по улучшению}
+Построение и обучение нейронной сети требует творческого подхода.
+каждая нейронная сеть должна быть настроена на свою конкретную задачу,
+ведь пытаться обучить ее всему подряд будет неэффективно. И, конечно,
+для каждой конкретной задачи есть свои издержки и хитрости, которые
+часто обнаруживаются путем проб и ошибок. В этой
+работе мы не стремились сделать идеально точную нейронную сеть, нашей
+задачей было лишь ее построение. Однако, для любопытных читателей, что
+хотели бы большей точности и производительности, мы оставим несколько
+идей, которые могли бы им помочь.
+\begin{itemize}
+    \item Прежде всего советуем начать экспериментировать с начальными
+        значениями введенных нами констант. Они оказываются важными
+        в начале обучения сети, когда синаптические
+        веса еще не скорректированы, но теряют свое влияние по мере
+        обучения сети.
+    \item Попробуйте сменить способ обучения сети. На наш взгляд, это
+        важнейший процесс, определяющий всю дальнейшую работу
+        нейронной сети. В нашем случае мы использовали конкурентное
+        обучение без учителя, однако, кроме него есть еще обучение с
+        учителем или с подкреплением и каждый со своими подтипами.
+    \item Не стоит ограничиваться самоорганизующимися картами для
+        задачи классификации. Возможно, вам стоит обратить внимание на
+        другие более мощные нейронные сети, например, на CNN
+        (\textit{Convolutional Neural Network}), которые также
+        применяются для задач классификации.
+\end{itemize}
 
 \chapter{Приложение} \label{sec:appendix}
 
-\begin{longlisting}
+\begin{code}
     \inputminted{cpp}{code/utils.hpp}
     \caption{Полный код реализации вспомогательных пространств имен}
     \label{code:full_utils}
-\end{longlisting}
+\end{code}
 \vspace{5mm}
 
-\begin{longlisting}
+\begin{code}
     \inputminted{cpp}{code/sokm.hpp}
     \caption{Полный код реализации \textbf{struct neuron} и \textbf{class sokm}}
     \label{code:full_sokm}
-\end{longlisting}
+\end{code}
 \vspace{5mm}
 
-\begin{longlisting}
+\begin{code}
     \inputminted{cpp}{code/main.cpp}
-    \caption{Полный код основной вызывающей функции \textbf{main()}}
+    \caption{Полный код точки входа программы \textbf{main()}}
     \label{code:full_main}
-\end{longlisting}
+\end{code}
 \vspace{5mm}
+
+
+
+\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+\clearpage
+
+
+\renewcommand{\lstlistlistingname}{Список листингов}
+\phantomsection
+\addcontentsline{toc}{chapter}{\lstlistlistingname}
+\lstlistoflistings
+\clearpage
+
+\pagebreak
+
 
 \end{document}

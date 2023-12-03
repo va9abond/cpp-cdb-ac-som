@@ -1,7 +1,24 @@
+\usepackage{listings}
 \usepackage{fontawesome}
 \usepackage{minted}
+    % \renewcommand\listingscaption{My Listing Caption}
 \setminted{
     linenos=true,
     autogobble,
 }
-\newenvironment{longlisting}{\captionsetup{type=listing}}{}
+
+% \renewcommand{\lstlistlistingname}{Список листингов}
+% put it ^^^ just before \lstlistoflistings
+\renewcommand{\lstlistingname}{Листинг}
+\newenvironment{code}{\captionsetup{type=lstlisting}}{}
+% \renewcommand{\lstlistlistingname}{Список листингов}
+
+
+% \begin{lstlisting}[label=some-code,caption=Some Code]
+%     public void here() {
+%         goes().the().code()
+%     }
+% \end{lstlisting}
+
+% https://tex.stackexchange.com/questions/107516/minted-customise-listing-name
+% https://stackoverflow.com/questions/741985/latex-source-code-listing-like-in-professional-books
