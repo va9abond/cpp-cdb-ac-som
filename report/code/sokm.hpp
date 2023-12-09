@@ -74,8 +74,8 @@ private:
     // |     n
     // + -------->
     void construct_feature_layer (int n, int m) {
-        error_handler::_VERIFY((n*m) != 0 ,
-                               "output layer shoud contain at least one dimension");
+        error_handler::_VERIFY((n*m) != 0,
+            "output layer shoud contain at least one dimension");
 
         for (ui x = 0; x < n; ++x) {
             for (ui y = 0; y < m; ++y) {
@@ -120,7 +120,8 @@ private:
 
                                       // competition process
         for (ui neuron_no {0}; neuron_no < neurons.size(); ++neuron_no) {
-            double dist = sq_euclidean_distance(signal, neurons[neuron_no].weights);
+            double dist = sq_euclidean_distance(signal,
+                                neurons[neuron_no].weights);
             if (math::is_double_grt(min_sq_dist, dist)) {
                 min_sq_dist = dist;
                 ix = neuron_no;
@@ -305,7 +306,10 @@ namespace ccout { // custom console output
 }
 
 
-void sokm_education_mnist (sokm& map, std::string file_path, alias::ui epochs = 1) {
+void sokm_education_mnist (
+        sokm& map, std::string file_path,
+        alias::ui epochs = 1
+    ) {
     std::ifstream file (file_path, std::ios::in | std::ios::binary);
 
     if (file.is_open()) {

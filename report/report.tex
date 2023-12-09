@@ -11,12 +11,15 @@
 \input{letterfonts}
 
 
+
 \title{Отчет по курсовой работе\\"Построение нейронной сети Кохонена"}
 \author{КМБО-01-21, Рустем Сиразетдинов}
 
 
 \begin{document}
+
     \maketitle
+    \setcounter{page}{2}
     \newpage
     \tableofcontents
     \pagebreak
@@ -49,6 +52,33 @@
 распознавания цифр.
 
 \chapter{Введение} \label{chapter:Introduction}
+
+В данной работе читателю предлагается сначала познакомиться с таким типом нейронных сетей как
+самоорганизующаяся карта Кохонена, а после перейти к ее реализации на
+языке \textit{C++} в стандарте
+\textbf{ISO International Standard ISO/IEC 14882: 2020(E) – Programming
+Language C++}. При компиляции кода
+программы были использованы следующие флаги.
+
+\begin{verbatim}
+        clang++ -pedantic-errors -Wall -Werror -g3 -O0 --std=c++20 -g
+\end{verbatim}
+
+Программа прошла проверку на утечки памяти с
+помощью утилиты \textit{valgrind} с флагом \verb|-s|.
+
+Работа
+представлена шестью главами. В первой
+главе описана
+мотивации работы. Во второй мы знакомим читателя с общими положениями
+нейронных сетей. В главе три
+мы рассматриваем такой тип нейронных сетей как самоорганизующиеся карты Кохонена. В четвертой главе
+приводим реализацию модели нейронной сети Кохонена, введенной нами в
+главе три. Четвертая глава
+описывает полученные нами результаты и подытоживает всю работу. В
+главе пять представлен подробный код
+программы, написанной нами в главе четыре, а глава шесть представлена используемой при написании работы литературой.
+
 \section{Знакомство с нейронными сетями}
 Исследования по нейронным сетям связаны с тем, что способ обработки
 информации человеческим мозгом в корне отличается от методов,
@@ -1480,6 +1510,7 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 листинге \ref{code:neuron}.
 
 \begin{code}
+    \captionsetup{justification=centering, skip=3pt}
     \inputminted{cpp}{code/struct_neuron.hpp}
     \caption{Реализация вычислительного нейрона карты}
     \label{code:neuron}
@@ -1491,6 +1522,7 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 операции сравнения см. листинг \ref{code:comp_neuron}.
 
 \begin{code}
+    \captionsetup{justification=centering, skip=3pt}
     \inputminted{cpp}{code/comp_neuron.hpp}
     \caption{Бинарные операций сравнения \textbf{struct neuron} }
     \label{code:comp_neuron}
@@ -1504,6 +1536,7 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 \verb|class sokm| см. листинг \ref{code:base_sokm}.
 
 \begin{code}
+    \captionsetup{justification=centering, skip=3pt}
     \inputminted{cpp}{code/base_sokm.hpp}
     \caption{Код части реализации \textbf{class sokm} }
     \label{code:base_sokm}
@@ -1514,6 +1547,7 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 представленные в листинге \ref{code:constants_update}.
 
 \begin{code}
+    \captionsetup{justification=centering, skip=3pt}
     \inputminted{cpp}{code/constants_update.hpp}
     \caption{Код реализующий обновление констант}
     \label{code:constants_update}
@@ -1526,6 +1560,7 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 листинге \ref{code:train_less}.
 
 \begin{code}
+    \captionsetup{justification=centering, skip=3pt}
     \inputminted{cpp}{code/train_less.hpp}
     \caption{Раздельная реализации основных этапов обучения сети}
     \label{code:train_less}
@@ -1551,6 +1586,7 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 \ref{code:hji}.
 
 \begin{code}
+    \captionsetup{justification=centering, skip=3pt}
     \inputminted{cpp}{code/train.hpp}
     \caption{Реализации функций \textbf{hji()} и \textbf{sq\_euclidean\_distance()}}
     \label{code:hji}
@@ -1738,9 +1774,15 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
         применяются для задач классификации.
 \end{itemize}
 
+\section{Вывод}
+Самоорганизующиеся карты, которые не всегда линейны, имеют преимущество в сохранении структурной информации из обучающих данных в неизменном виде. Другой вид нейронных сетей,
+такой как "Метод Главных Компонент" может привести к потере информации при использовании, когда сами данные имеют большую размерность, а мы хотим ее уменьшить.
+Самоорганизующиеся карты могут быть отличной альтернативой МГК для уменьшения размерности, особенно если данные имеют несколько измерений и каждое заданное измерение имеет значение.
+
 \chapter{Приложение} \label{sec:appendix}
 
 \begin{code}
+    \captionsetup{skip=3pt}
     \inputminted{cpp}{code/utils.hpp}
     \caption{Полный код реализации вспомогательных пространств имен}
     \label{code:full_utils}
@@ -1748,6 +1790,7 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 \vspace{5mm}
 
 \begin{code}
+    \captionsetup{skip=3pt}
     \inputminted{cpp}{code/sokm.hpp}
     \caption{Полный код реализации \textbf{struct neuron} и \textbf{class sokm}}
     \label{code:full_sokm}
@@ -1755,6 +1798,7 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 \vspace{5mm}
 
 \begin{code}
+    \captionsetup{skip=3pt}
     \inputminted{cpp}{code/main.cpp}
     \caption{Полный код точки входа программы \textbf{main()}}
     \label{code:full_main}
@@ -1783,17 +1827,7 @@ h_{j,i(\bldx)}$ и получим формулу изменения матриц
 
 \bibitem{0}Поляков Г. И. О принципах нейронной организации мозга, М: МГУ, 1965
 
-
-\bibitem{2}Беркинблит М. Б.  Нейронные сети. — М.: МИРОС и ВЗМШ РАО, 1993. — 96 с.
-
-
-\bibitem{3}Вороновский Г. К., Махотило К. В., Петрашев С. Н., Сергеев С. А.  Генетические алгоритмы, искусственные нейронные сети и проблемы виртуальной реальности. — Харьков: Основа, 1997. — 112 с.
-
-
 \bibitem{haikin}Хайкин С.  Нейронные сети: полный курс - Neural Networks: A Comprehensive Foundation. 2-е изд. — М.: Вильямс, 2006. — 1104 с.
-
-
-\bibitem{5}Ясницкий Л. Н.  Введение в искусственный интеллект. — М.: Издат. центр «Академия», 2005. — 176 с.
 
 \bibitem{1}Kohonen T. Self-organizing maps. – Springer Science \& Business Media, 2012. – Т. 30.
 

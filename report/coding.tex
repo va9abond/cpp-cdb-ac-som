@@ -1,8 +1,14 @@
 \usepackage{listings}
 \usepackage{fontawesome}
 \usepackage{minted}
+
+% \usepackage{tcolorbox}
+% \BeforeBeginEnvironment{code}{\begin{tcolorbox}}%
+% \AfterEndEnvironment{code}{\end{tcolorbox}}%
     % \renewcommand\listingscaption{My Listing Caption}
+
 \setminted{
+    frame=lines,
     linenos=true,
     autogobble,
 }
@@ -12,6 +18,16 @@
 \renewcommand{\lstlistingname}{Листинг}
 \newenvironment{code}{\captionsetup{type=lstlisting}}{}
 % \renewcommand{\lstlistlistingname}{Список листингов}
+
+
+% \lstset{
+%      backgroundcolor=\color{gray!10},
+% }
+%
+% \DeclareCaptionFont{white}{\color{white}}
+% \DeclareCaptionFormat{listing}{\colorbox{gray!90}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{#1#2#3}}}
+% \captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white,justification=centering}
+
 
 
 % \begin{lstlisting}[label=some-code,caption=Some Code]
